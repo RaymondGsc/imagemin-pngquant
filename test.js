@@ -9,25 +9,26 @@ const imageminPngquant = require('.');
 const readFile = promisify(fs.readFile);
 
 test('optimize a PNG', async t => {
-	const buffer = await readFile(path.join(__dirname, 'fixture.png'));
+	const buffer = await readFile(path.join(__dirname, 'jack.png'));
 	const data = await imageminPngquant()(buffer);
 	t.true(data.length < buffer.length);
 	t.true(isPng(data));
 });
 
 test('support pngquant options', async t => {
-	const buffer = await readFile(path.join(__dirname, 'fixture.png'));
+	const buffer = await readFile(path.join(__dirname, 'jack.png'));
 	const data = await imageminPngquant({
 		speed: 10,
 		quality: [0.8, 1]
 	})(buffer);
+	fs.writeFile(path.join(__dirname, 'arse.png'), data, () => {});
 	t.true(data.length > 30000);
 	t.true(isPng(data));
 });
 
 test('support streams', async t => {
-	const buffer = await readFile(path.join(__dirname, 'fixture.png'));
-	const stream = fs.createReadStream(path.join(__dirname, 'fixture.png'));
+	const buffer = await readFile(path.join(__dirname, 'jack.png'));
+	const stream = fs.createReadStream(path.join(__dirname, 'jack.png'));
 	const data = await getStream.buffer(imageminPngquant()(stream));
 	t.true(data.length < buffer.length);
 	t.true(isPng(data));

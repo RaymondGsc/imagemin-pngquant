@@ -66,6 +66,11 @@ const imageminPngquant = (options = {}) => input => {
 			// We use `error.exitCode` to check for a special condition when running the pngquant binary.
 			// See details on handling of "99" code at https://pngquant.org (search for "status code 99").
 			if (error.exitCode === 99) {
+				if (typeof options.quality !== 'undefined') {
+					const [min, max] = options.quality;
+					const newQ = [Number((min - 0.05).toFixed(2)), max];
+					return Promise.resolve(imageminPngquant(Object.assign(options, {quality: newQ}))(input));
+				}
 				return input;
 			}
 
